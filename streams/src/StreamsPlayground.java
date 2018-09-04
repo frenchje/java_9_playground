@@ -117,8 +117,7 @@ public class StreamsPlayground {
         //If operandA is negative then flip the signs
         if(operandA < 0) {
             operandA = 0 - operandA;
-            operandB = 0 -
-                    operandB;
+            operandB = 0 - operandB;
         }
 
         for(int index = 0; index < operandA; index++) {
@@ -136,7 +135,6 @@ public class StreamsPlayground {
         if(operands.stream().anyMatch(nullVal))
             return null;
 
-
         //Check for 0
         Predicate<Integer> zero = val -> val == 0;
         if(operands.stream().anyMatch(zero))
@@ -145,12 +143,11 @@ public class StreamsPlayground {
         //Sort by absolute value
         List<Integer> sortedOperands = operands.stream().sorted(Comparator.comparingInt(Math::abs)).collect(Collectors.toList());
 
-        //IF first operand is null then flip sign on both operands.
+        //IF first operand is negative then flip sign on both operands.
         List<Integer> normalizedOperands = sortedOperands.stream().map(val -> { if(sortedOperands.get(0) < 0) return 0 - val; else return val;} ).collect(Collectors.toList());
 
         //Generate stream to add elements together.
         return Stream.iterate(normalizedOperands.get(1), i -> i).limit(normalizedOperands.get(0)).reduce(0,Integer::sum);
-
     }
 
     public static void testMultiplyWithStreams() {
