@@ -14,6 +14,9 @@ public class StreamsPlayground {
 
         System.out.println("****** Multiply with Streams *******");
         StreamsPlayground.testMultiplyWithStreams();
+
+        System.out.println("******* Testing Order Of Operations ********");
+        StreamsPlayground.testOrderOfOperations();
     }
 
     private static class MultiplyTestCase {
@@ -172,5 +175,118 @@ public class StreamsPlayground {
         }
     }
 
+    /*
+        Show order of operations
+     */
+    public static void testOrderOfOperations() {
+        /* Sort occurs after limit and search */
+        Predicate<Employee> salaryGt1000 = emp -> emp.getSalary() > 1000;
+       List<Employee> empList =  new ArrayList<Employee>(Arrays.asList(getEmployeeList()));
+
+       System.out.println(" :: Limit Before Filter :: ");
+       //Returns only one result because the employee list is limited before running the filter so only one item is passed to filter.
+        empList.stream().limit(5).filter(salaryGt1000).forEach(System.out::println);
+
+        System.out.println(" :: Limit After Filter :: ");
+        //Returns results;
+        empList.stream().filter(salaryGt1000).limit(5).forEach(System.out::println);
+
+        /* Return top 10 salarys */
+        System.out.println(" :: Sorting top 10 Salaries :: ");
+        empList.stream().limit(10).sorted(Comparator.comparingInt(o -> o.getSalary())).forEach(System.out::println);
+
+        System.out.println(" :: Sorting top 10 Salaries :: ");
+        empList.stream().sorted(Comparator.comparingInt(o -> o.getSalary())).limit(10).forEach(System.out::println);
+
+    }
+
+    public static class Employee {
+        private String firstName;
+        private String lastName;
+        Integer salary;
+        private String department;
+
+        public Employee () {
+
+        }
+
+        public Employee(String firstName, String lastName, Integer salary, String department) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.salary = salary;
+            this.department = department;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        public Integer getSalary() {
+            return salary;
+        }
+
+        public void setSalary(Integer salary) {
+            this.salary = salary;
+        }
+
+        public String getDepartment() {
+            return department;
+        }
+
+        public void setDepartment(String department) {
+            this.department = department;
+        }
+
+        @Override
+        public String toString() {
+            return "Employee: " + lastName + ", " + firstName + " | Salary: " + salary + " | Department: " + department;
+        }
+    }
+
+    /*
+        Generates List of employees to work on.
+     */
+    public static Employee[] getEmployeeList() {
+        Employee[] employeeList= {
+                new Employee("Anne","Frank",500,"Human Resources"),
+                new Employee("Joe","Jackson",1000,"Human Resources"),
+                new Employee("John","Fire",1500,"Human Resources"),
+                new Employee("Steve","Frank",200,"Human Resources"),
+                new Employee("Sarah","Frank",400,"Human Resources"),
+                new Employee("Jean","Frank",600,"Human Resources"),
+                new Employee("Anna","Frank",1200,"Human Resources"),
+                new Employee("Annabelle","Frank",1400,"Human Resources"),
+                new Employee("Keri","Frank",900,"Human Resources"),
+                new Employee("Kayla","Frank",250,"Human Resources"),
+                new Employee("James","Frank",100,"Human Resources"),
+                new Employee("Quentin","Frank",120,"Human Resources"),
+                new Employee("Adrian","Frank",180,"Human Resources"),
+                new Employee("Claire","Frank",900,"Human Resources"),
+                new Employee("Melanie","Frank",350,"Human Resources"),
+                new Employee("MIke","Frank",375,"Human Resources"),
+                new Employee("Liam","Frank",425,"Human Resources"),
+                new Employee("Luke","Frank",555,"Human Resources"),
+                new Employee("Lisa","Frank",655,"Human Resources"),
+                new Employee("Joseph","Frank",725,"Human Resources"),
+                new Employee("Patty","Frank",325,"Human Resources"),
+                new Employee("Patrick","Frank",225,"Human Resources"),
+                new Employee("Bill","Frank",175,"Human Resources"),
+                new Employee("Britta","Frank",100,"Human Resources"),
+        };
+
+        return employeeList;
+    }
 
 }
