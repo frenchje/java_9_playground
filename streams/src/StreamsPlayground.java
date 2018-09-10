@@ -191,19 +191,23 @@ public class StreamsPlayground {
         //Returns results;
         empList.stream().filter(salaryGt1000).limit(5).forEach(System.out::println);
 
+        Comparator<Employee> salaryCompare = Comparator.comparing(employee -> employee.getSalary());
         /* Return top 10 salarys */
         System.out.println(" :: Sorting top 10 Salaries :: ");
-        empList.stream().limit(10).sorted(Comparator.comparingInt(o -> o.getSalary())).forEach(System.out::println);
+        empList.stream().limit(10).sorted(salaryCompare.reversed()).forEach(System.out::println);
 
         System.out.println(" :: Sorting top 10 Salaries :: ");
-        empList.stream().sorted(Comparator.comparingInt(o -> o.getSalary())).limit(10).forEach(System.out::println);
+        empList.stream().sorted(salaryCompare.reversed()).limit(10).forEach(System.out::println);
+
+        System.out.println(" :: Find bottom 5 of the Top 10 Salaries :: " );
+        empList.stream().sorted(salaryCompare.reversed()).limit(10).sorted(salaryCompare).limit(5).forEach(System.out::println);
 
     }
 
     public static class Employee {
         private String firstName;
         private String lastName;
-        Integer salary;
+        private Integer salary;
         private String department;
 
         public Employee () {
