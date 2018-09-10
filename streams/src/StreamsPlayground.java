@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,6 +15,9 @@ public class StreamsPlayground {
 
         System.out.println("******* Testing Order Of Operations ********");
         StreamsPlayground.testOrderOfOperations();
+
+        System.out.println("******* Testing Advance Mapping of Employee Objects *******");
+        testAdvancedMappingEmployees();
     }
 
     private static class MultiplyTestCase {
@@ -192,7 +193,7 @@ public class StreamsPlayground {
         empList.stream().filter(salaryGt1000).limit(5).forEach(System.out::println);
 
         Comparator<Employee> salaryCompare = Comparator.comparing(employee -> employee.getSalary());
-        /* Return top 10 salarys */
+        /* Return top 10 salaries */
         System.out.println(" :: Sorting top 10 Salaries :: ");
         empList.stream().limit(10).sorted(salaryCompare.reversed()).forEach(System.out::println);
 
@@ -201,6 +202,30 @@ public class StreamsPlayground {
 
         System.out.println(" :: Find bottom 5 of the Top 10 Salaries :: " );
         empList.stream().sorted(salaryCompare.reversed()).limit(10).sorted(salaryCompare).limit(5).forEach(System.out::println);
+
+        System.out.println(" :: Find Average of Top 10 salaries ::");
+        Double averageTop10 = empList.stream().sorted(salaryCompare.reversed()).limit(10).mapToInt(Employee::getSalary).average().getAsDouble();
+        Double averageAll = empList.stream().mapToInt(Employee::getSalary).average().getAsDouble();
+
+
+        System.out.println("Average of Top 10 Salaries: " + averageTop10);
+        System.out.println("Average of Salaries: " + averageAll);
+
+    }
+
+    /*
+       Employee Test Advanced Mapping
+     */
+    public static void testAdvancedMappingEmployees() {
+        List<Employee> empList =  new ArrayList<Employee>(Arrays.asList(getEmployeeList()));
+
+        /*
+           Map by department
+         */
+        System.out.println(" :: Mapping Employees by department. :: ");
+        Map<String, IntSummaryStatistics> empMap = empList.stream().collect(Collectors.groupingBy(Employee::getDepartment,Collectors.summarizingInt(Employee::getSalary)));
+        empMap.forEach((department,stats) -> System.out.println("Department: " + department + " -- " + stats));
+
 
     }
 
@@ -266,28 +291,28 @@ public class StreamsPlayground {
         Employee[] employeeList= {
                 new Employee("Anne","Frank",500,"Human Resources"),
                 new Employee("Joe","Jackson",1000,"Human Resources"),
-                new Employee("John","Fire",1500,"Human Resources"),
-                new Employee("Steve","Frank",200,"Human Resources"),
-                new Employee("Sarah","Frank",400,"Human Resources"),
-                new Employee("Jean","Frank",600,"Human Resources"),
-                new Employee("Anna","Frank",1200,"Human Resources"),
-                new Employee("Annabelle","Frank",1400,"Human Resources"),
-                new Employee("Keri","Frank",900,"Human Resources"),
-                new Employee("Kayla","Frank",250,"Human Resources"),
-                new Employee("James","Frank",100,"Human Resources"),
-                new Employee("Quentin","Frank",120,"Human Resources"),
-                new Employee("Adrian","Frank",180,"Human Resources"),
-                new Employee("Claire","Frank",900,"Human Resources"),
-                new Employee("Melanie","Frank",350,"Human Resources"),
-                new Employee("MIke","Frank",375,"Human Resources"),
-                new Employee("Liam","Frank",425,"Human Resources"),
-                new Employee("Luke","Frank",555,"Human Resources"),
+                new Employee("John","Fire",1500,"Executive"),
+                new Employee("Steve","Frank",200,"Engineering"),
+                new Employee("Sarah","Frank",400,"Engineering"),
+                new Employee("Jean","Frank",600,"Sales"),
+                new Employee("Anna","Frank",1200,"Operations"),
+                new Employee("Annabelle","Frank",1400,"Executive"),
+                new Employee("Keri","Frank",900,"Sales"),
+                new Employee("Kayla","Frank",250,"Maintenance"),
+                new Employee("James","Frank",100,"Maintenance"),
+                new Employee("Quentin","Frank",120,"Marketing"),
+                new Employee("Adrian","Frank",180,"Sales"),
+                new Employee("Claire","Frank",900,"Engineering"),
+                new Employee("Melanie","Frank",350,"Marketing"),
+                new Employee("MIke","Frank",375,"IT"),
+                new Employee("Liam","Frank",425,"IT"),
+                new Employee("Luke","Frank",555,"Sales"),
                 new Employee("Lisa","Frank",655,"Human Resources"),
-                new Employee("Joseph","Frank",725,"Human Resources"),
-                new Employee("Patty","Frank",325,"Human Resources"),
-                new Employee("Patrick","Frank",225,"Human Resources"),
-                new Employee("Bill","Frank",175,"Human Resources"),
-                new Employee("Britta","Frank",100,"Human Resources"),
+                new Employee("Joseph","Frank",725,"Executive"),
+                new Employee("Patty","Frank",325,"Sales"),
+                new Employee("Patrick","Frank",225,"Engineering"),
+                new Employee("Bill","Frank",175,"Operations"),
+                new Employee("Britta","Frank",100,"Operations"),
         };
 
         return employeeList;
